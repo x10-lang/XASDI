@@ -3,16 +3,12 @@
 
 ### Due Dates
 
-- Open source by the submission of X10 workshop paper (Mar. 20 AoE)
-
-- Release v0.9.0 with prebuilt binary by the announcement at the next CASSIA meeting (Mar. 29)
+- Release v0.9.0 with prebuilt binary package by the announcement at the next CASSIA meeting (Mar. 29)
 
 
 ### Work Items
 
-- OPEN SOUECE
-  - Copy the current internal repository https://git.sl.cloud9.ibm.com/XAXIS/xasdi to the new repository, and make the current repository read-only (or delete). (Takeuchi)
-
+- Make the internal repository read-only. (Mizuta-san)
 
 - Write a script for creating a prebuilt binary package. (Takeuchi)
 
@@ -25,7 +21,7 @@
 
 - Create a prebuilt binary package. (Takeuchi)
 
-- Document prerelease testing scheme. (Mizuta-san)
+- Document pre-release testing scheme. (Mizuta-san)
    - Test cases: TBD
    - JVM version(s): TBD
    - OS type(s) and version(s): TBD
@@ -53,9 +49,9 @@
 
 - We have the final approval by Yoshihama-san.
 
-- We use GitHub issues for report bugs by end users.
+- We published XASDI as open source on March 8. The baseline is https://git.sl.cloud9.ibm.com/XAXIS/xasdi/commits/move-to-github. We copied files from the internal repository to the external repository. We did't copy their metadata such as commit logs.
 
-- We will copy files from the current internal repository to the external repository. We won't copy their metadata such as commit logs.
+- We will use GitHub issues for report bugs by end users.
 
 - The version number for the next release will be v0.9.0.
 

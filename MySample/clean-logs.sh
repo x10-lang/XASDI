@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 rm -rf logs
-rm sample.csv
+rm -f sample.csv
