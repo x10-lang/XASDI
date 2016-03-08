@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="xasdi_bridge" default="build">
+    <description>build for xasdi_bridge</description>
+
+    <property name="src" value="src"/>
+    <property name="bin" value="bin"/>
+    <property name="lib" value="lib"/>
+    <property name="jar" value="xasdi-bridge.jar"/>
+    <property name="doc" value="../../api"/>
+
+    <target name="dist" depends="build,javadoc"/>
+
+    <target name="build" depends="compile,timestamp">
+        <jar jarfile="${jar}" basedir="${bin}" includes="**/*.class"/>
+    </target>
+	
+    <target name="compile">
+        <mkdir dir="${bin}"/>
+        <javac srcdir="${src}" destdir="${bin}" source="1.6" target="1.6" includeantruntime="true" debug="true"/>
+    </target>
+
+    <target name="javadoc">
+        <mkdir dir="${doc}"/>
+        <javadoc sourcepath="${src}" destdir="${doc}" source="1.6" locale="en_US"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${bin}"/>
+        <delete dir="${doc}"/>
+        <delete file="${jar}"/>
+    </target>
+	
+    <target name="timestamp">
+        <tstamp>
+            <format property="ts" pattern="yyyyMMddHHmm"/>
+        </tstamp>
+    </target>
+
+</project>
