@@ -8,8 +8,6 @@
 
 ### Work Items
 
-- Make the internal repository read-only. (Mizuta-san)
-
 - Write a script for creating a prebuilt binary package. (Takeuchi)
 
    1. Create a tag https://github.com/x10-lang/xasdi/releases/tag/v0.9.0 for the release
@@ -49,7 +47,7 @@
 
 - We have the final approval by Yoshihama-san.
 
-- We published XASDI as open source on March 8. The baseline is https://git.sl.cloud9.ibm.com/XAXIS/xasdi/commits/move-to-github. We copied files from the internal repository to the external repository. We did't copy their metadata such as commit logs.
+- We published XASDI as open source on March 8. The baseline is https://git.sl.cloud9.ibm.com/XAXIS/xasdi/commits/move-to-github. We copied files from the internal repository to the external repository. We did't copy their metadata such as commit logs. The internal repository was archived and read-only.
 
 - We will use GitHub issues for report bugs by end users.
 
