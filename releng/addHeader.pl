@@ -2,7 +2,7 @@
 
 sub printCHeader {
     print "/*\n";
-    print " *  This file is part of the XASDI project (https://github.com/x10-lang/xasdi).\n";
+    print " *  This file is part of the XASDI project (http://x10-lang.org/xasdi/).\n";
     print " *\n";
     print " *  This file is licensed to You under the Eclipse Public License (EPL);\n";
     print " *  You may not use this file except in compliance with the License.\n";
@@ -15,7 +15,7 @@ sub printCHeader {
 
 sub printMakeHeader {
     print "#\n";
-    print "#  This file is part of the XASDI project (https://github.com/x10-lang/xasdi).\n";
+    print "#  This file is part of the XASDI project (http://x10-lang.org/xasdi/).\n";
     print "#\n";
     print "#  This file is licensed to You under the Eclipse Public License (EPL);\n";
     print "#  You may not use this file except in compliance with the License.\n";

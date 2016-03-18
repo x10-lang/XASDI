@@ -20,9 +20,9 @@ do
   for file in $JAVA_FILES $X10_FILES
   do
       hasHeader=yes
-      `grep -q "This file is part of the XASDI project (https://github.com/x10-lang/xasdi)." $file` || hasHeader=no
+      `grep -q "This file is part of the XASDI project (http://x10-lang.org/xasdi/)." $file` || hasHeader=no
       `grep -q "This file is licensed to You under the Eclipse Public License (EPL)" $file` || hasHeader=no
-      `grep -q "(C) Copyright" $file` || hasHeader=no
+      `grep -q "(C) Copyright IBM Corporation 2014-2016." $file` || hasHeader=no
       if [[ "X$hasHeader" == "Xno" ]]; then
 	  echo "Invoking standardizeHeader.pl on $file"
 	  $top/xasdi/releng/standardizeHeader.pl $file
