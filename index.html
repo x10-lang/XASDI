@@ -1,9 +1,129 @@
-<html lang="en_US">
+<!DOCTYPE html>
+<html>
   <head>
-    <meta charset="UTF-8">
-    <title>X10-based Agent Simulation on Distributed Infrastructure (XASDI)</title>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>XASDI by hmizuta</title>
   </head>
+
   <body>
-    UNDER CONSTRUCTION
+    <header>
+      <div class="inner">
+        <h1>XASDI</h1>
+        <h2>X10-based Agent Simulation on Distributed Infrastructure (XASDI)</h2>
+        <a href="https://github.com/hmizuta/xasdi" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h2>
+<a id="ibm-x10-based-agent-simulation-on-distributed-infrastructure-xasdi" class="anchor" href="#ibm-x10-based-agent-simulation-on-distributed-infrastructure-xasdi" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>IBM X10-based Agent Simulation on Distributed Infrastructure (XASDI)</h2>
+
+<h3>
+<a id="about-xasdi" class="anchor" href="#about-xasdi" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>About XASDI</h3>
+
+<p>XASDI is a platform for a massive agent-based simulation and is written in <a href="http://x10-lang.org/">the X10 programming language</a>.
+In XASDI, an agent manager manages agents that are executed asynchronously in each place.
+An agent in a place can communicate with an agent in another place by sending a communication message.</p>
+
+<h3>
+<a id="directories-and-files" class="anchor" href="#directories-and-files" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Directories and files</h3>
+
+<ul>
+<li>api (XASDI API javadoc)</li>
+<li>doc (XASDI Application Development Guide)</li>
+<li>jar (XASDI runtime jar file)</li>
+<li>src (XASDI runtime source code)</li>
+<li>MySample (a sample XASDI application source code (Eclipse project))</li>
+<li>README.md (this file)</li>
+</ul>
+
+<h3>
+<a id="building-xasdi-runtime-from-source" class="anchor" href="#building-xasdi-runtime-from-source" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Building XASDI runtime from Source</h3>
+
+<ol>
+<li>Set up build environment
+
+<ul>
+<li>Java Development Kit (JDK) 6 or later (JDK 8 is recommended)</li>
+<li>Ant 1.9.6 or later</li>
+<li>X10 2.5.4
+
+<ul>
+<li>Download a prebuilt binary for your platform from <a href="http://x10-lang.org/releases/x10-release-254.html">http://x10-lang.org/releases/x10-release-254.html</a>
+</li>
+<li>After downloading, untar and see the INSTALL file for further instructions.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>cd src</li>
+<li>execute ./build.sh</li>
+</ol>
+
+<h3>
+<a id="building-and-running-a-sample-xasdi-application" class="anchor" href="#building-and-running-a-sample-xasdi-application" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Building and running a sample XASDI application</h3>
+
+<ol>
+<li>Set up build environment (if not yet done)</li>
+<li>cd MySample</li>
+<li>ant</li>
+<li>execute ./run-Sample.sh</li>
+</ol>
+
+<h3>
+<a id="information-for-developing-your-own-application" class="anchor" href="#information-for-developing-your-own-application" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Information for developing your own application</h3>
+
+<p>Refer to the XASDI Application Development Guide and API javadoc.</p>
+
+<h3>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h3>
+
+<p>XASDI is licensed to You under the Eclipse Public License (EPL).
+You may not use XASDI except in compliance with the License.
+You may obtain a copy of the License at
+<a href="http://www.opensource.org/licenses/eclipse-1.0.php">http://www.opensource.org/licenses/eclipse-1.0.php</a></p>
+
+<h3>
+<a id="sponsor" class="anchor" href="#sponsor" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sponsor</h3>
+
+<p>This project is supported by <a href="http://www.jst.go.jp/kisoken/crest/en/index.html">CREST</a>, Japan Science and Technology Agency.</p>
+
+<h3>
+<a id="feedback" class="anchor" href="#feedback" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Feedback</h3>
+
+<p>Please feel free to submit your feedback or requests as <a href="https://github.com/x10-lang/xasdi/issues">GitHub issues</a>.</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/hmizuta/xasdi/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/hmizuta/xasdi/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/hmizuta/xasdi"></a> is maintained by <a href="https://github.com/hmizuta">hmizuta</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
   </body>
 </html>
