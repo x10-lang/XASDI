@@ -111,9 +111,13 @@ public class AgentManager {
 		for(var i:Int=0n; i<nCitizens; i++){
 			val cp:XCitizenProxy = mr.getNewCitizenProxy(i);
 			val cid:Long = cp.getID();
-			val ca:CitizenAgent = new CitizenAgent(new AgentID(pid, i), this, cp);
-			citizenAgents.put(cid, ca);
-			citizenIDList.add(cid);
+
+			if (!citizenIDList.contains(cid)) {
+				val ca:CitizenAgent = new CitizenAgent(new AgentID(pid, i), this, cp);
+				citizenAgents.put(cid, ca);
+				citizenIDList.add(cid);
+			}
+
 			// TODO: regist this new agent to other places
 		}
 		mr.clearNewCitizens();

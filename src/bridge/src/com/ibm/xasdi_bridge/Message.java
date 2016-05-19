@@ -122,6 +122,20 @@ public class Message implements Serializable {
 	}
 	
 	/**
+	 * Set object for migration.
+	 * @param m object to migrate
+	 * @param destID X10 Place ID of destination
+	 */
+	public void setMovable(Movable m, long destID){
+		type = CITIZEN_MOVE;
+		citizenID = m.getObjectID();
+		regionId = World.world().getPlaceID();
+		destRegionID = destID;
+		text = m.getClass().getName();
+		fields = Region.setFields((MovableFields)CopyFields.setFields(m,m.getMovableFields()));	
+	}
+	
+	/**
 	 * Get field variables in a agent to migrate.
 	 * @return HashMap about field variables (Key is name, Value is value)
 	 */
