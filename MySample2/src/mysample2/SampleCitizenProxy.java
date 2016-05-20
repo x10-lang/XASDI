@@ -29,7 +29,6 @@ public class SampleCitizenProxy extends CitizenProxy implements Movable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -1877841600462439815L;
 
 	/*
 	 * By having this class, this fields are serialized into byte stream with deep copy
@@ -40,10 +39,7 @@ public class SampleCitizenProxy extends CitizenProxy implements Movable {
 		/**
 		 * 
 		 */
-		private static final long serialVersionUID = 1515684289102723950L;
-		@SuppressWarnings("unused")
 		private int attribute;
-		@SuppressWarnings("unused")
 		private SampleModel model;
 	}
 
