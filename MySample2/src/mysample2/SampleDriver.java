@@ -16,11 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import mysample2.message.BroadCastMessage;
-import mysample2.message.MutualMessage;
-
 import com.ibm.xasdi_bridge.CitizenID;
 import com.ibm.xasdi_bridge.Message;
-import com.ibm.xasdi_bridge.citizen.Movable;
 import com.ibm.xasdi_bridge.message.MessageList;
 import com.ibm.xasdi_bridge.simulator.CitizenProxy;
 import com.ibm.xasdi_bridge.simulator.Driver;

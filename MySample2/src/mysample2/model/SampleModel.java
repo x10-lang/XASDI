@@ -16,6 +16,10 @@ import java.util.LinkedList;
 
 public class SampleModel implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1456858236024796820L;
 	private double a;
 	private LinkedList<Integer> numlist;
 	private SampleParam param;

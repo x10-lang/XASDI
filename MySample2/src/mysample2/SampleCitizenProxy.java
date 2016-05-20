@@ -26,13 +26,24 @@ import com.ibm.xasdi_bridge.simulator.Region;
 
 public class SampleCitizenProxy extends CitizenProxy implements Movable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1877841600462439815L;
+
 	/*
 	 * By having this class, this fields are serialized into byte stream with deep copy
 	 * and then de-serialized it into a vehicle object again with XASDI layer automatically
 	 */
 	private class MoveFields implements MovableFields
 	{	
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1515684289102723950L;
+		@SuppressWarnings("unused")
 		private int attribute;
+		@SuppressWarnings("unused")
 		private SampleModel model;
 	}
 

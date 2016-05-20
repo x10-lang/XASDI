@@ -13,10 +13,6 @@ package mysample2.sim;
 
 import java.io.File;
 import java.util.Properties;
-import java.util.Iterator;
-import java.util.HashMap;
-import java.util.Map;
-
 import mysample2.SampleCitizenFactory;
 import mysample2.SampleCitizenProxyFactory;
 import mysample2.SampleDriver;
