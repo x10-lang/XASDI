@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="directory">./</entry>
+<entry key="simTime">6</entry>
+<entry key="simName">MySample2</entry>
+<entry key="nThreads">2</entry>
+<entry key="nPlaces">2</entry>
+<entry key="numPhase">2</entry>
+<entry key="launcherName">mysample2.sim.SampleLauncher</entry>
+<entry key="workFile">Sample/citizenPlaceMap.csv</entry>
+<entry key="driverFile">Sample/driverPlaceMap.csv</entry>
+<entry key="numCitizen">10</entry>
+<entry key="logFile">logs/sample</entry>
+<entry key="logBuffSize">100</entry>
+</properties>

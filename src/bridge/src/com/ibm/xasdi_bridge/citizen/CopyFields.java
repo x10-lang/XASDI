@@ -48,7 +48,7 @@ public class CopyFields {
 					e.printStackTrace();
 				}
 			}else{
-				System.err.println("Fields mismatched");
+				System.err.println("Fields mismatched "+f.getName());
 				System.exit(0);
 			}
 		}

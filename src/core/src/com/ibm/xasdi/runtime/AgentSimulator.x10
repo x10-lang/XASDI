@@ -116,12 +116,12 @@ public class AgentSimulator {
 						
 					team.barrier();
 
+					updateCitizens(managers().mr.getMoveCitizenMessages());
+					team.barrier();
+
 					managers().registNewAgents();
 					team.barrier();
 
-					updateCitizens(managers().mr.getMoveCitizenMessages());
-
-					team.barrier();
 					managers().mr.sendToReply(false);   //  for reply Messages
 	
 					if(here.id == 0){
