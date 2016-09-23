@@ -1,4 +1,4 @@
-## IBM X10-based Agent Simulation on Distributed Infrastructure (XASDI)
+## X10-based Agent Simulation on Distributed Infrastructure (XASDI)
 
 
 ### About XASDI
