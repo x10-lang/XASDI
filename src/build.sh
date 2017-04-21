@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Building XASDI Java API..."
-(cd bridge; ant clean build)
+(cd bridge; ant clean dist)
 echo "...DONE"
 
 

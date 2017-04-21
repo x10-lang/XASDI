@@ -1,4 +1,4 @@
-## IBM X10-based Agent Simulation on Distributed Infrastructure (XASDI)
+## X10-based Agent Simulation on Distributed Infrastructure (XASDI)
 
 
 ### About XASDI
@@ -20,8 +20,8 @@ An agent in a place can communicate with an agent in another place by sending a 
 1. Set up build environment
   - Java Development Kit (JDK) 6 or later (JDK 8 is recommended)
   - Ant 1.9.6 or later
-  - X10 2.5.4
-      - Download a prebuilt binary for your platform from http://x10-lang.org/releases/x10-release-254.html
+  - X10 2.5.4 or later
+      - Download the latest prebuilt binary for your platform from http://x10-lang.org/software/download-x10/latest-release.html
       - After downloading, untar and see the INSTALL file for further instructions.
 2. cd src
 3. execute ./build.sh
