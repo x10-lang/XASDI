@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="project" default="build">
+    <description>build for Auction</description>
+
+    <property name="src" value="src"/>
+    <property name="bin" value="bin"/>
+    <property name="lib" value="lib"/>
+    <property name="jar" value="auction.jar"/>
+
+    <target name="dist" depends="build"/>
+
+    <target name="build" depends="compile,timestamp">
+        <jar jarfile="${jar}" basedir="${bin}" includes="**/*.class"/>
+    </target>
+	
+    <target name="compile">
+        <mkdir dir="${bin}"/>
+        <javac srcdir="${src}" destdir="${bin}" classpath="../jar/xasdi.jar" encoding="utf-8" source="1.8" target="1.8" includeantruntime="true" debug="true"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${bin}"/>
+        <delete file="${jar}"/>
+    </target>
+	
+    <target name="timestamp">
+        <tstamp>
+            <format property="ts" pattern="yyyyMMddHHmm"/>
+        </tstamp>
+    </target>
+
+</project>

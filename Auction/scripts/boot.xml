@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="directory">./</entry>
+<entry key="simName">auction</entry>
+<entry key="nThreads">2</entry>
+<entry key="nPlaces">1</entry>
+<entry key="numPhase">2</entry>
+<entry key="launcherName">auction.sim.AuctionLauncher</entry>
+<entry key="workFile">citizenPlaceMap.csv</entry>
+<entry key="driverFile">driverPlaceMap.csv</entry>
+<entry key="simTime">50</entry>
+<entry key="numBidder">10</entry>
+<entry key="numHouse">2</entry>
+<entry key="seed">1</entry>
+<entry key="logFile">logs</entry>
+<entry key="logBuffSize">100</entry>
+<entry key="logBid">true</entry>
+</properties>
