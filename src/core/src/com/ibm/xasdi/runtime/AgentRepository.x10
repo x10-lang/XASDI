@@ -6,7 +6,7 @@
  *  You may obtain a copy of the License at
  *      http://www.opensource.org/licenses/eclipse-1.0.php
  *
- *  (C) Copyright IBM Corporation 2014-2016.
+ *  (C) Copyright IBM Corporation 2014-2018.
  */
 
 package com.ibm.xasdi.runtime;
