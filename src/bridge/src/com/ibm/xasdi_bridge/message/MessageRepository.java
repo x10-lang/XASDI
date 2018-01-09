@@ -138,9 +138,7 @@ public class MessageRepository {
 	 * @return newCitizenSet
 	 */
 	public ArrayList<Long> getNewCitizenSet() {
-		ArrayList<Long> tmp = (ArrayList<Long>) newCitizenSet.clone();
-		newCitizenSet.clear();
-		return tmp;
+		return new ArrayList<Long>(newCitizenSet.size());
 	}
 	
 	public int getNumNewCitizens() {
@@ -234,7 +232,8 @@ public class MessageRepository {
 	
 	/**
 	 * Called when receiving list of messages from a different X10 Place to register remote citizen ID.
-	 * @param msgs List of messages
+	 * @param msgq List of messages
+	 * @param remotepid X10 Place ID
 	 */
 	public void checkRemoteMessages(MessageQueue msgq, int remotepid){
 		if (msgq != null){

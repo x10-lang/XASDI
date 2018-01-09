@@ -97,7 +97,8 @@ public class LogDefinition {
 	
 	/**
 	 * Returns true if the logs of this type (definition) is enabled. 
-	 * The following equation holds.<br />
+	 * The following equation holds.
+	 * <p>
 	 * {@link #isEnabled()} = !{@link #isDisabled()}
 	 * @return true if the logs of this type (definition) is enabled
 	 */
@@ -107,7 +108,8 @@ public class LogDefinition {
 	
 	/**
 	 * Returns true if the logs of this type (definition) is disabled.
-	 * The following equation holds.<br />
+	 * The following equation holds.
+	 * <p>
 	 * {@link #isDisabled()} = !{@link #isEnabled()}
 	 * @return true if the logs of this type (definition) is disabled
 	 */

@@ -21,9 +21,8 @@ public interface State {
 	/**
 	 * Gets the number of columns stored in this object.
 	 * @return the number of columns
-	 * @throws IllegalArgumentException
 	 */
-	int getNumberOfColumns() throws IllegalArgumentException;
+	int getNumberOfColumns();
 	
 	/**
 	 * Gets the value of a column as an int value.

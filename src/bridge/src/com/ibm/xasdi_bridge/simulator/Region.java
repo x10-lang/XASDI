@@ -14,7 +14,6 @@ package com.ibm.xasdi_bridge.simulator;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.logging.Logger;
 
 import com.ibm.xasdi_bridge.*;
 import com.ibm.xasdi_bridge.citizen.*;
@@ -26,8 +25,6 @@ import com.ibm.xasdi_bridge.rt.state.UpdateableStateImpl;
  * Simulation object manages agents(Citizen, Driver), factories of Citizen agents, 
  */
 public abstract class Region {
-	
-	private static Logger logger = Logger.getLogger(Region.class.getName()); 
 	
 	/**
 	 * Repository of CitizenProxyFactory objects.
@@ -639,7 +636,7 @@ public abstract class Region {
 	/**
 	 * Set all field variables to repository as Message.
 	 * @param obj
-	 * @throws Exception
+	 * @return 
 	 */
 	public static HashMap<String, Object> setFields(MovableFields obj) {		//	for Movable
 		HashMap<String, Object> values = new HashMap<String, Object>();

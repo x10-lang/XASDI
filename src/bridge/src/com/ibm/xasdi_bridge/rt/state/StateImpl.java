@@ -31,7 +31,7 @@ public class StateImpl implements State, StateType, Externalizable {
 	/* (non-Javadoc)
 	 * @see com.ibm.xasdi_bridge.State#getNumberOfColumns()
 	 */
-	public int getNumberOfColumns() throws IllegalArgumentException {
+	public int getNumberOfColumns() {
 		if (entries == null) {
 			return 0;
 		}

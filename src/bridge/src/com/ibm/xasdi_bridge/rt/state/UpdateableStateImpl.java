@@ -56,7 +56,7 @@ public class UpdateableStateImpl implements UpdateableState, StateType, External
 	/* (non-Javadoc)
 	 * @see com.ibm.xasdi_bridge.State#getNumberOfColumns()
 	 */
-	public int getNumberOfColumns() throws IllegalArgumentException {
+	public int getNumberOfColumns() {
 		if (entries == null) {
 			return 0;
 		}

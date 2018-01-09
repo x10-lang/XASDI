@@ -54,15 +54,11 @@ public interface Launcher {
 	/**
 	 * Called when the simulation should be started.
 	 * In most cases, this method can be implemented as below.
-	 * <br /><br />
-	 * <code>
-	 * try {<br />
-	 * &nbsp;&nbsp;&nbsp;&nbsp;World.world().start();<br />
-	 * } catch(Exception e) {<br />
-	 * &nbsp;&nbsp;&nbsp;&nbsp;e.printStackTrace();<br />
-	 * }
-	 * </code>
-	 * 
+	 * <pre>{@code try {
+	 *     World.world().start();
+	 * } catch(Exception e) {
+	 *     e.printStackTrace();
+	 * }}</pre>
 	 * @param prop properties specified in the runtime configuration
 	 * @see com.ibm.xasdi_bridge.simulator.World#start
 	 */

@@ -28,6 +28,7 @@ public class MessageQueue implements java.io.Serializable{
 	/**
 	 * Constructor using CitizenID
 	 * @param cids	Set of all CitizenID in this X10 Place
+	 * @param pid	X10 Place ID
 	 */
 	public MessageQueue(Set<Long> cids, int pid){
 		this.pid = pid;
@@ -127,6 +128,7 @@ public class MessageQueue implements java.io.Serializable{
 	
 	/**
 	 * Get destination X10 Place ID bound to this repository.
+	 * @return X10 Place ID
 	 */
 	public int getPID(){
 		return pid;

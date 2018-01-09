@@ -333,7 +333,7 @@ public class World {
 	 */
 	public Region getRegion(long id) {
 		synchronized(regionIndex) {
-			return regionIndex.get(new Long(id));
+			return regionIndex.get((int) id);
 		}
 	}
 	
