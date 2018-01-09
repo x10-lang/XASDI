@@ -1,13 +1,5 @@
 /api/
 /jar/
-/src/bridge/bin/
-/src/bridge/xasdi-bridge.jar
-/src/core/bin/
-/src/core/xasdi-core.jar
-/MySample/logs/
-/MySample/bin/
-/MySample/mysample.jar
-/MySample/sample.csv
 /bin/
 /.settings/
 /.classpath
