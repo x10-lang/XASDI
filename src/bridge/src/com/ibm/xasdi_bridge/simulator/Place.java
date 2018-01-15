@@ -17,6 +17,10 @@ import com.ibm.xasdi_bridge.CitizenID;
 import com.ibm.xasdi_bridge.PlaceID;
 import com.ibm.xasdi_bridge.State;
 import com.ibm.xasdi_bridge.UpdateableState;
+import com.ibm.xasdi_bridge.citizen.ShadowInfo;
+import com.ibm.xasdi_bridge.citizen.ShadowList;
+import com.ibm.xasdi_bridge.citizen.ShadowMap;
+import com.ibm.xasdi_bridge.citizen.Shadowable;
 import com.ibm.xasdi_bridge.rt.state.StateImpl;
 import com.ibm.xasdi_bridge.rt.state.UpdateableStateImpl;
 
@@ -59,6 +63,17 @@ public class Place implements java.io.Serializable {
 	protected Set<CitizenID> citizenSet;
 	
 	/**
+	 * List of Citizen Proxies participate in this object.
+	 */
+	protected LinkedList<CitizenProxy> citizenList = new LinkedList<CitizenProxy>();
+	
+	/**
+	 * List of ShadowInfos of Citizens at this object
+	 */
+	protected ShadowList shadowList;
+	protected ShadowList originshadowList;
+	
+	/**
 	 * Constructor should be used.
 	 * @param region Region object owns this.
 	 * @param id Region ID (Long).
@@ -92,6 +107,22 @@ public class Place implements java.io.Serializable {
 	 */
 	public void setCitizenSet(Set<CitizenID> citizenSet) {
 		this.citizenSet = citizenSet;
+	}
+	
+	/**
+	 * Add CitizenProxy into this object.
+	 * @param CitizenProxy CitizenProxy that enter into this object.
+	 */
+	public void addCitizen(CitizenProxy cp) {
+		citizenList.add(cp);
+	}
+	
+	/**
+	 * Remove CitizenProxy from this object.
+	 * @param CitizenProxy CitizenProxy that exit from this object.
+	 */
+	public void removeCitizen(CitizenProxy cp) {
+		citizenList.remove(cp);
 	}
 
 	/**
@@ -175,5 +206,32 @@ public class Place implements java.io.Serializable {
 	 * @param time a simulation time
 	 */
 	public void complete(long time) {}
-
+	
+	/**
+	 * Called to prepare the ShadowList of Citizens at this object.
+	 * @return ShadowList of Citizens at this object
+	 */
+	public ShadowList prepareShadowList() {
+		originshadowList = new ShadowList();
+		// prepare shadowlist by gathering ShadowInfo from the set of Shadowable Citizens at this Place
+		// To be customized
+		for (CitizenProxy cp : citizenList) {
+			if (cp instanceof Shadowable) {
+				ShadowInfo shadowinfo = ((Shadowable) cp).prepareShadowInfo();
+				originshadowList.add(shadowinfo);
+			}
+		}
+//		System.out.println("Place.prepareShadowList size = "+originshadowList.size() + " at place "+id.getLocalID());
+		return originshadowList;
+	}
+	
+	/**
+	 * Called when the Region receive ShadowList from other X10 Places
+	 * @param ShadowList from other X10 Places
+	 */
+	synchronized public void addShadowList(ShadowList shadows){
+//		System.out.println("Place.addShadowList "+shadows.toString() + " at place "+id.getLocalID());
+		if (shadowList == null) shadowList = new ShadowList();
+		shadowList.addAll(shadows);
+	}
 }

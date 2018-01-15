@@ -18,6 +18,7 @@ import com.ibm.xasdi_bridge.CitizenID;
 import com.ibm.xasdi_bridge.citizen.CopyFields;
 import com.ibm.xasdi_bridge.citizen.Movable;
 import com.ibm.xasdi_bridge.citizen.MovableFields;
+import com.ibm.xasdi_bridge.citizen.ShadowMap;
 import com.ibm.xasdi_bridge.simulator.Region;
 import com.ibm.xasdi_bridge.simulator.World;
 
@@ -64,6 +65,11 @@ public class Message implements Serializable {
 	public static final int CITIZEN_REMOVE = 99;
 	
 	/**
+	 * Used by XAXIS when shadow agent information is set.
+	 */
+	public static final int SHADOW = 200;
+	
+	/**
 	 * Represents this message is used for console output.
 	 */
 	public static final int CONSOLE = 1000;
@@ -86,6 +92,7 @@ public class Message implements Serializable {
 	private long citizenID;			//	Object ID (mainly CitizenID)
 	private String text = null;		//	String for console output, or class name implements Movable
 	private HashMap<String, Object> fields = new HashMap<String, Object>();		//	Field values of Movable object
+	private ShadowMap shadow = null;  // Shadow  Agent Information
 	
 	/**
 	 * Whether this message needs reply message.
@@ -152,6 +159,23 @@ public class Message implements Serializable {
 	}
 
 	/**
+	 * Get shadow agent data.
+	 * @return Shadow data map
+	 */
+	public ShadowMap getShadow() {
+		return shadow;
+	}
+
+	/**
+	 * Set shadow agent data.
+	 * @param shadow shadow data map
+	 */
+	public void setShadow(ShadowMap shadow) {
+		type = SHADOW;
+		this.shadow = shadow;
+	}
+
+	/**
 	 * Get Region ID of message destination.
 	 * @return If this message is used for agent removing, return -1. Otherwise, Region ID of destination.
 	 */
@@ -183,6 +207,14 @@ public class Message implements Serializable {
 		return citizenID;
 	}
 
+	/**
+	 * Set ID of agent to migrate.
+	 * @param Citizen ID as long type
+	 */
+	public void setCitizenID(long cid){
+		this.citizenID = cid;
+	}
+	
 	/**
 	 * Get message type.
 	 * @return Message type as int type

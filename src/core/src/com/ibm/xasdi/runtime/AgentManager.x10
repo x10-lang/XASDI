@@ -36,6 +36,9 @@ public class AgentManager {
 
 	private static val logger = LogFactory.getLog("XASDILOG");
 
+	static val BROADCASTID : Int = -1n; // same definition in MessageRepository
+	static val REGIONBROADCASTID : Int = -2n; // same definition in MessageRepository
+
 	public def this(nThreads:Int, nPhases:Int){
 		this.nThreads = nThreads;
 		this.nPhases = nPhases;
@@ -121,6 +124,8 @@ public class AgentManager {
 			// TODO: regist this new agent to other places
 		}
 		mr.clearNewCitizens();
+		ntotal : Long = citizenIDList.size();
+		logger.info("Num of Citizens = " + ntotal );
 	}
 	
 	//	below 2 methods are called by AgentSimulator to exchange CitizenProxy Agents
@@ -209,7 +214,7 @@ public class AgentManager {
 	}
 	
 	public def handleMessages(totalMsgQ:XMessageQueue){		//	totalMsgQ is a message queue for storing all the received messages
-		val bmsgs : XMessageList = totalMsgQ.getMessages(-1); // TODO: use const in MessageRepository
+		val bmsgs : XMessageList = totalMsgQ.getMessages(BROADCASTID);
 		for(aid:Long in citizenAgents.keySet()){ // TODO: not loop all citizen
 			val cp : XCitizenProxy = (citizenAgents.getAgent(aid) as CitizenAgent).getCitizen();
 			if(bmsgs != null){

@@ -551,7 +551,30 @@ public abstract class Region {
 	 * Send the same messages to Region, Driver agent, etc.
 	 * @param msgq Message repository to be sent
 	 */
-	public abstract void sendMsgQ(MessageQueue msgq);
+	public void sendMsgQ(MessageQueue msgq) {
+//		System.out.println("Region.sendMsgQ "+msgq.size());
+		MessageList msgs = msgq.getMessages(MessageRepository.REGIONBROADCCASTCID);
+		if (msgs != null) {
+			for(Message msg : msgs){
+				receiveRegionBroadcastMessage(msg);
+			}
+		}
+	}
+	
+	/**
+	 * Called when receiving a region broadcast message.
+	 * @param msg Message to be received
+	 */
+	public void receiveRegionBroadcastMessage(Message msg) {
+//		System.out.println("Region.receiveRegionBroadcastMessage "+msg.toString());
+		if (msg.getRegionID() != this.id) {
+			if (msg.getType() == Message.SHADOW) {
+				ShadowMap shadow = msg.getShadow();
+				putShadowMap(shadow);
+			}
+		}
+		// By default, do nothing
+	}
 	
 	/**
 	 * Tell all groups of agents that simulation finished.
@@ -663,4 +686,74 @@ public abstract class Region {
 		return values;
 	}
 
+	
+	/**
+	 * Prepare Map of ShadowLists from Places in this Region
+	 * @return	Map of PlaceIDs and ShadowLists
+	 */
+	public ShadowMap prepareShadowMap() {
+		ShadowMap shadowMap = new ShadowMap();
+		for (Map.Entry<Long, Place> entry : places.entrySet()) {
+			long pid = entry.getKey();
+			Place place = entry.getValue();
+			ShadowList shadowList = place.prepareShadowList();
+			if (shadowList != null && shadowList.size() > 0) shadowMap.put(pid, shadowList);
+		}
+		return shadowMap;
+	}
+	
+	/**
+	 * Prepare Map of ShadowLists from a Place in this Region
+	 * @return	Map of PlaceIDs and ShadowLists
+	 */
+	public synchronized ShadowMap preparePlaceShadowMap(Place place) {
+		ShadowMap shadowMap = new ShadowMap();
+		long pid = place.getID().getLocalID();
+//		System.out.println("Region.preparePlaceShadowMap placeid "+pid);
+		ShadowList shadowList = place.prepareShadowList();
+		if (shadowList != null && shadowList.size() > 0) shadowMap.put(pid, shadowList);
+		return shadowMap;
+	}
+	
+	/**
+	 * Put ShadowList to Places in this Region
+	 * @param smap	Map of PlaceIDs and ShadowLists from other Regions
+	 */
+	public void putShadowMap(ShadowMap smap) {
+//		System.out.println("Region.putShadowMap "+smap.size());
+		for (Map.Entry<Long, ShadowList> entry : smap.entrySet()) {
+			long pid = entry.getKey();
+			ShadowList slist = entry.getValue();
+			Place place = places.get(pid);
+//			System.out.println("Region.putShadowMap pid "+pid);
+			if (place != null) place.addShadowList(slist);
+		}
+	}
+	
+	/**
+	 * Send Shadow message as a region broadcast message.
+	 */
+	public void sendShadowMessage() {
+		Message msg = new Message();
+		msg.setRegionID(this.id);
+		ShadowMap shadow = prepareShadowMap();
+		msg.setShadow(shadow);
+		repository.addRegionBroadcastMessage(msg);
+	}
+	
+	/**
+	 * Send Shadow message for one Place as a region broadcast message.
+	 */
+	public synchronized void sendPlaceShadowMessage(Place place) {
+		Message msg = new Message();
+		msg.setRegionID(this.id);
+		ShadowMap shadow = preparePlaceShadowMap(place);
+		if (shadow != null && shadow.size() > 0)
+		{
+//			System.out.println("Region.sendPlaceShadowMessage");
+			msg.setShadow(shadow);
+			repository.addRegionBroadcastMessage(msg);
+//			System.out.println("Region.sendPlaceShadowMessage sent from place "+place.id.getLocalID());
+		}
+	}
 }

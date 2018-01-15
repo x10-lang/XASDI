@@ -29,6 +29,7 @@ public class AgentSimulator {
 	protected var agentManager:AgentManager;
 	protected var nThreads:Int;						//	for constructor of AgentManager
 	protected val citizenMap:Map[Long, Int];		//	mapping CitizenID and X10 PlaceID
+	protected var nMovedCitizen : Long = 0n;        //  number of moved citizen between X10 Places
 		
 	private static val logger = LogFactory.getLog("XASDILOG");
 	
@@ -129,6 +130,7 @@ public class AgentSimulator {
 						logger.info("step :" + t +"\t(time=" + (simstepTime/(1000*1000)) + " ms)");
 					}
 				}
+				logger.info("Number of moved citizens = " + nMovedCitizen);
 			}
 		}else{
 			for(var t_:Int=0n ; t_ < num_of_simulations; t_++){
@@ -266,6 +268,7 @@ public class AgentSimulator {
 				case CITIZEN_MOVE:
 					removeCitizen(sm.getCitizenID(), sm.getOrigRID() as Int);
 					addCitizen(sm);
+					nMovedCitizen++;
 					break;
 				case CITIZEN_REMOVE:
 					removeCitizen(sm.getCitizenID(), sm.getOrigRID() as Int);

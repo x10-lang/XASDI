@@ -37,7 +37,7 @@ public class MessageRepository {
 	protected ArrayList<Long> newCitizenSet;
 	
 	public static final int BROADCCASTCID = -1; // used for Broadcast message in X10 Agent Manager
-	
+	public static final int REGIONBROADCCASTCID = -2; // used for Region Broadcast message in X10 Agent Manager
 
 	
 	/**
@@ -200,7 +200,14 @@ public class MessageRepository {
 	 * @param cid ID of Citizen to be removed
 	 */
 	public synchronized void removeCitizen(long cid){
-		if(World.world().containsCitizen(cid))World.world().getCitizenPlaceMap().remove(cid);
+		if(World.world().containsCitizen(cid))
+		{
+			World.world().getCitizenPlaceMap().remove(cid);
+			Message msg = new Message(Message.CITIZEN_REMOVE);
+			msg.setCitizenID(cid);
+			msg.setRegionID(region.getID());
+			moveCitizenList.add(msg);
+		}
 	}
 
 	/**
@@ -209,7 +216,7 @@ public class MessageRepository {
 	 * @param msg Message object to be sent
 	 * @return the same Message object
 	 */
-	public Message addMessage(CitizenID cid, Message msg) {				//	CitizenID should be set here (from xasdi_bridge)
+	public synchronized Message addMessage(CitizenID cid, Message msg) {				//	CitizenID should be set here (from xasdi_bridge)
 		if(cid == null || msg == null)return null;
 		long lid = cid.getLocalID();
 		citizenMsgQSet.get(World.world().getCitizenPlaceID(lid)).addMessage(lid, msg);
@@ -221,11 +228,25 @@ public class MessageRepository {
 	 * @param msg Message object to be sent
 	 * @return the same Message object
 	 */
-	public Message addBroadcastMessage(Message msg) {
+	public synchronized Message addBroadcastMessage(Message msg) {
 		
 		for (MessageQueue msgq: citizenMsgQSet.values())
 		{
 			msgq.addMessage(BROADCCASTCID, msg);
+		}
+		return msg;
+	}
+	
+	/**
+	 * Add message to the repository for all X10 Places. Destination is set for region broadcat (without MessageResolver)
+	 * @param msg Message object to be sent
+	 * @return the same Message object
+	 */
+	public synchronized Message addRegionBroadcastMessage(Message msg) {
+//		System.out.println("MessageRepository: addRegionBroadcaseMessage "+msg.toString());
+		for (MessageQueue msgq: citizenMsgQSet.values())
+		{
+			msgq.addMessage(REGIONBROADCCASTCID, msg);
 		}
 		return msg;
 	}
@@ -241,7 +262,7 @@ public class MessageRepository {
 			for (MessageList msgs : msgmap.values()){
 				for(Message msg : msgs){
 					CitizenID cid = msg.getSenderID();
-					World.world().setCitizenPlaceID(cid.getLocalID(), remotepid);
+					if (cid != null) World.world().setCitizenPlaceID(cid.getLocalID(), remotepid);
 				}
 			}
 		}
