@@ -209,7 +209,7 @@ public class Message implements Serializable {
 
 	/**
 	 * Set ID of agent to migrate.
-	 * @param Citizen ID as long type
+	 * @param cid Citizen ID as long type
 	 */
 	public void setCitizenID(long cid){
 		this.citizenID = cid;

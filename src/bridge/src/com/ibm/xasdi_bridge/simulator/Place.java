@@ -111,7 +111,7 @@ public class Place implements java.io.Serializable {
 	
 	/**
 	 * Add CitizenProxy into this object.
-	 * @param CitizenProxy CitizenProxy that enter into this object.
+	 * @param cp CitizenProxy that enter into this object.
 	 */
 	public void addCitizen(CitizenProxy cp) {
 		citizenList.add(cp);
@@ -119,7 +119,7 @@ public class Place implements java.io.Serializable {
 	
 	/**
 	 * Remove CitizenProxy from this object.
-	 * @param CitizenProxy CitizenProxy that exit from this object.
+	 * @param cp CitizenProxy that exit from this object.
 	 */
 	public void removeCitizen(CitizenProxy cp) {
 		citizenList.remove(cp);
@@ -227,7 +227,7 @@ public class Place implements java.io.Serializable {
 	
 	/**
 	 * Called when the Region receive ShadowList from other X10 Places
-	 * @param ShadowList from other X10 Places
+	 * @param shadows ShadowList from other X10 Places
 	 */
 	synchronized public void addShadowList(ShadowList shadows){
 //		System.out.println("Place.addShadowList "+shadows.toString() + " at place "+id.getLocalID());
