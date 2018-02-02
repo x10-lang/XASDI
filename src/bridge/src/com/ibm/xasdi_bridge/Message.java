@@ -65,7 +65,7 @@ public class Message implements Serializable {
 	public static final int CITIZEN_REMOVE = 99;
 	
 	/**
-	 * Used by XAXIS when shadow agent information is set.
+	 * Used by XASDI when shadow agent information is set.
 	 */
 	public static final int SHADOW = 200;
 	
