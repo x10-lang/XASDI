@@ -138,7 +138,9 @@ public class MessageRepository {
 	 * @return newCitizenSet
 	 */
 	public ArrayList<Long> getNewCitizenSet() {
-		return new ArrayList<Long>(newCitizenSet.size());
+		ArrayList<Long> tmp = (ArrayList<Long>) newCitizenSet.clone();
+		newCitizenSet.clear();
+		return tmp;
 	}
 	
 	public int getNumNewCitizens() {
