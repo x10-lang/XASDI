@@ -66,7 +66,7 @@ public class AgentSimulator {
 		logger.info("Copying Agent Manager to Multiple Places with PlaceLocalHandle ...");
 		logger.info("It might take a while if the number of places is many.");
 		
-		var copyTime:long = System.nanoTime();
+		val copyTime = System.nanoTime();
 		if(XASDIRuntime.plhOpt){
 			managers = PlaceLocalHandle.makeFlat[AgentManager](Place.places(), ()=> agentManager);
 			logger.info("Using makeFlat method.");
@@ -76,16 +76,16 @@ public class AgentSimulator {
 		}
 		logger.info("Finished Copying Agent Manager. Elapsed time=" + ((System.nanoTime() - copyTime)/(1000*1000*1000)) + "s" );
 		
-		var startTime:long = System.nanoTime();
+		val startTime = System.nanoTime();
 
 		finish for (h in Place.places()) at(h) async {
 			
 			val pid = here.id;
 			logger.info("AgentSimulator.run#" + pid);
-			val lp : XLauncherProxy = XASDIRuntime.init(dir, simName, num_of_simulations);
+			val lp = XASDIRuntime.init(dir, simName, num_of_simulations);
 			this.init();
 			
-			ag:AgentManager = managers();
+			val ag = managers();
 			ag.setPID(pid);
 			logger.info("run " + pid);
 			ag.setPLH(managers);
@@ -97,61 +97,56 @@ public class AgentSimulator {
 		// Simulation Cycle
 		if(Place.numPlaces() > 1){
 			finish for(h in Place.places()) at(h) async {
-				for(var t_:Int=0n ; t_ < num_of_simulations; t_++){
+				val ag = managers();
+				for(var t:Int=0n ; t < num_of_simulations; t++){
 					if(Debug.debugEnabled) Console.OUT.println("run agents at place id : " + here.id);
-					val t = t_;
-					val startstepTime:long = System.nanoTime();
-					val ag :AgentManager = managers();
+					val startstepTime = System.nanoTime();
 					ag.runDrivers(t);
 					ag.runCitizens(t);
 					
 					team.barrier();
 						
 					val start = System.nanoTime();		//	evaluation
-					
-					managers().mr.sendToReply(true);	//	for reply Messages
+					ag.mr.sendToReply(true);	//	for reply Messages
 					exchangeMessages();		
-
 					val elapsed = System.nanoTime() - start;
 					if(Debug.debugEnabled)Console.OUT.println("Exchange Messages at " + here.id + ": " + elapsed/(1000*1000) + " ms");
 						
 					team.barrier();
 
-					updateCitizens(managers().mr.getMoveCitizenMessages());
+					updateCitizens(ag.mr.getMoveCitizenMessages());
+
 					team.barrier();
 
-					managers().registNewAgents();
+					ag.registNewAgents();
+
 					team.barrier();
 
-					managers().mr.sendToReply(false);   //  for reply Messages
-	
+					ag.mr.sendToReply(false);   //  for reply Messages
 					if(here.id == 0){
-						var simstepTime:long = System.nanoTime() - startstepTime;
+						val simstepTime = System.nanoTime() - startstepTime;
 						logger.info("step :" + t +"\t(time=" + (simstepTime/(1000*1000)) + " ms)");
 					}
 				}
 				logger.info("Number of moved citizens = " + nMovedCitizen);
 			}
 		}else{
-			for(var t_:Int=0n ; t_ < num_of_simulations; t_++){
-				val t = t_;
-				var startstepTime:long = System.nanoTime();
+			val ag = managers();
+			for(var t:Int=0n ; t < num_of_simulations; t++){
+				val startstepTime = System.nanoTime();
 				
-				finish for (h in Place.places()) at(h) async {
-					if(Debug.debugEnabled) Console.OUT.println("run agents at place id : " + here.id);
-					val ag :AgentManager = managers();
-					ag.runDrivers(t);
-					ag.runCitizens(t);
-				}
+				if(Debug.debugEnabled) Console.OUT.println("run agents at place id : " + here.id);
+				ag.runDrivers(t);
+				ag.runCitizens(t);
 				
 				exchangeMessagesAllPlaces();
 				
-				var simstepTime:long = System.nanoTime() - startstepTime;
+				val simstepTime = System.nanoTime() - startstepTime;
 				logger.info("step :" + t +"\t(time=" + (simstepTime/(1000*1000)) + " ms)");
 			}
 		}
 
-		var stepSimTime:long = System.nanoTime() - startTime;
+		val stepSimTime = System.nanoTime() - startTime;
 		logger.info("Simulation (time=" + (stepSimTime/(1000*1000)) + " ms)");
 
 		logger.info("shutdown ...");
@@ -166,31 +161,26 @@ public class AgentSimulator {
 		val pid = here.id;
 		
 		finish for(h2 in Place.places()) async {
+			val ag = managers();
 			if(h2.id != pid){							//	here place does not use "at" deep copy
-				val temp1 = at(h2){
-					managers().mr.getDriverMsgQ(pid as Int)
-				};
-				
-				val temp2 = at(h2){
-					managers().mr.getCitizenMsgQ(pid as Int)
-				};
-				
-				managers().handleMessages(temp1);
-				managers().mr.checkRemoteMessages(temp2, h2.id as Int);
-				managers().handleMessages(temp2);
+				val temp1 = at(h2) managers().mr.getDriverMsgQ(pid as Int);
+				val temp2 = at(h2) managers().mr.getCitizenMsgQ(pid as Int);
+				ag.handleMessages(temp1);
+				ag.mr.checkRemoteMessages(temp2, h2.id as Int);
+				ag.handleMessages(temp2);
 			}else{										//	handle messages at here place
-				val temp1 = managers().mr.getDriverMsgQ(pid as Int);
-				val temp2 = managers().mr.getCitizenMsgQ(pid as Int);
-				
-				managers().handleMessages(temp1);
-                                managers().handleMessages(temp2);
+				val temp1 = ag.mr.getDriverMsgQ(pid as Int);
+				val temp2 = ag.mr.getCitizenMsgQ(pid as Int);
+				ag.handleMessages(temp1);
+				ag.handleMessages(temp2);
 			}
 		}
 
 		finish for(h2 in Place.places()) async{
 			//	TODO: these clear() procedures will be removed (clear at Application level) 
-			managers().mr.getDriverMsgQ(h2.id as Int).clear();
-			managers().mr.getCitizenMsgQ(h2.id as Int).clear();
+			val ag = managers();
+			ag.mr.getDriverMsgQ(h2.id as Int).clear();
+			ag.mr.getCitizenMsgQ(h2.id as Int).clear();
 		}		
 	}
 	
@@ -220,15 +210,17 @@ public class AgentSimulator {
 					Rail.asyncCopy(citizenOrigArr, 0, citizenDstArr, 0, 1);
 				}
 				
-				managers().handleMessages(driverDstArr(0));
-				managers().handleMessages(citizenDstArr(0));
+				val ag = managers();
+				ag.handleMessages(driverDstArr(0));
+				ag.handleMessages(citizenDstArr(0));
 			}
 		}
 		
 		finish for(h2 in Place.places()) async{
 			//	TODO: these clear() procedures will be removed (clear at Application level) 
-			managers().mr.getDriverMsgQ(h2.id as Int).clear();
-			managers().mr.getCitizenMsgQ(h2.id as Int).clear();
+			val ag = managers();
+			ag.mr.getDriverMsgQ(h2.id as Int).clear();
+			ag.mr.getCitizenMsgQ(h2.id as Int).clear();
 		}
 	}
 
@@ -237,30 +229,26 @@ public class AgentSimulator {
 		finish for(h1 in Place.places()) at(h1) async{
 			val pid = here.id;
 			for(h2 in Place.places()) async{
-				val temp1 = at(h2){
-					managers().mr.getDriverMsgQ(pid as Int)
-				};
-
-				val temp2 = at(h2){
-					managers().mr.getCitizenMsgQ(pid as Int)
-				};
-			
-				managers().handleMessages(temp1);
-				managers().handleMessages(temp2);
+				val temp1 = at(h2) managers().mr.getDriverMsgQ(pid as Int);
+				val temp2 = at(h2) managers().mr.getCitizenMsgQ(pid as Int);
+				val ag = managers();
+				ag.handleMessages(temp1);
+				ag.handleMessages(temp2);
 			}
 		}
 		finish for(h1 in Place.places()) at(h1) async{
-			updateCitizens(managers().mr.getMoveCitizenMessages());
+			val ag = managers();
+			updateCitizens(ag.mr.getMoveCitizenMessages());
 			for(h2 in Place.places()) {
-				managers().mr.getDriverMsgQ(h2.id as Int).clear();
-				managers().mr.getCitizenMsgQ(h2.id as Int).clear();
+				ag.mr.getDriverMsgQ(h2.id as Int).clear();
+				ag.mr.getCitizenMsgQ(h2.id as Int).clear();
 			}
 		}
 	}
 	
 	protected def updateCitizens(sml: XMessageList){
 		while(!sml.isEmpty()){
-			sm : XMessage = sml.removeFirst();
+			val sm = sml.removeFirst();
 			switch(sm.getType()){
 				case CITIZEN_ADD:
 					addCitizen(sm);
@@ -278,8 +266,8 @@ public class AgentSimulator {
 	}
 
 	private def addCitizen(sm:XMessage){
-		cid:Long = sm.getCitizenID();
-		pid:Int = sm.getDestRID() as Int;
+		val cid = sm.getCitizenID();
+		val pid = sm.getDestRID() as Int;
 		citizenMap.put(cid, pid);
 		at(Place(pid as Long)){
 			managers().addCitizen(sm);

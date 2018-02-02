@@ -11,6 +11,7 @@
 
 package com.ibm.xasdi.runtime;
 
+import x10.compiler.Pragma;
 import x10.util.*;
 import x10.io.File;
 import x10.util.logging.LogFactory;
@@ -36,8 +37,8 @@ public class AgentManager {
 
 	private static val logger = LogFactory.getLog("XASDILOG");
 
-	static val BROADCASTID : Int = -1n; // same definition in MessageRepository
-	static val REGIONBROADCASTID : Int = -2n; // same definition in MessageRepository
+	static val BROADCASTID = -1n; // same definition in MessageRepository
+	static val REGIONBROADCASTID = -2n; // same definition in MessageRepository
 
 	public def this(nThreads:Int, nPhases:Int){
 		this.nThreads = nThreads;
@@ -86,7 +87,7 @@ public class AgentManager {
 		mr.setUp(Place.numPlaces() as Int);
 		logger.info("Drivers = " + nDrivers); 
 		for (var index:Int = 0n; index<nDrivers; index++){
-			val d:XDriver = lp.getDriver(index);
+			val d = lp.getDriver(index);
 
 			if(Debug.debugEnabled) Console.OUT.println("create a driver : index=" + index + " " + d);
 			did:Long = d.getID();
@@ -96,12 +97,12 @@ public class AgentManager {
 			driverAgents.put(did, agent);
 		}
 		
-		nCitizens:Int = lp.getNumCitizens();		//	first number of citizens
+		val nCitizens = lp.getNumCitizens();		//	first number of citizens
 		logger.info("Citizens = " + nCitizens );
 		for(var i:Int=0n; i<nCitizens; i++){
-			val cp:XCitizenProxy = lp.getCitizenProxy(i);
-			val cid:Long = cp.getID();
-			val ca:CitizenAgent = new CitizenAgent(new AgentID(pid, i), this, cp);
+			val cp = lp.getCitizenProxy(i);
+			val cid = cp.getID();
+			val ca = new CitizenAgent(new AgentID(pid, i), this, cp);
 			citizenAgents.put(cid, ca);
 			citizenIDList.add(cid);
 		}
@@ -109,32 +110,30 @@ public class AgentManager {
 
 
 	public def registNewAgents(){
-		nCitizens:Int = mr.getNumNewCitizens();		//	number of new citizens
+		val nCitizens = mr.getNumNewCitizens();		//	number of new citizens
 		logger.info("New Citizens = " + nCitizens );
 		for(var i:Int=0n; i<nCitizens; i++){
-			val cp:XCitizenProxy = mr.getNewCitizenProxy(i);
-			val cid:Long = cp.getID();
-
+			val cp = mr.getNewCitizenProxy(i);
+			val cid = cp.getID();
 			if (!citizenIDList.contains(cid)) {
-				val ca:CitizenAgent = new CitizenAgent(new AgentID(pid, i), this, cp);
+				val ca = new CitizenAgent(new AgentID(pid, i), this, cp);
 				citizenAgents.put(cid, ca);
 				citizenIDList.add(cid);
 			}
-
 			// TODO: regist this new agent to other places
 		}
 		mr.clearNewCitizens();
-		ntotal : Long = citizenIDList.size();
+		val ntotal = citizenIDList.size();
 		logger.info("Num of Citizens = " + ntotal );
 	}
 	
 	//	below 2 methods are called by AgentSimulator to exchange CitizenProxy Agents
 	//	put CitizenProxy(from CitizenProxyMessage) to this AgentManager
 	public def addCitizen(sm:XMessage){
-		cp : XCitizenProxy = lp.restoreCitizen(sm);
-		val cid:Long = cp.getID();
-		val aid:AgentID = new AgentID(here.id, cid);
-		val ca:CitizenAgent = new CitizenAgent(aid, this, cp);
+		val cp = lp.restoreCitizen(sm);
+		val cid = cp.getID();
+		val aid = new AgentID(here.id, cid);
+		val ca = new CitizenAgent(aid, this, cp);
 		
 		citizenAgents.put(cid, ca);
 		citizenIDList.add(cid);
@@ -153,32 +152,31 @@ public class AgentManager {
 	/** 
 	 * A method for running all the citizens' method 
 	 */
-	public def runCitizens(var time:Long){
-		nCitizens : Long = citizenIDList.size();
-		var nAgentsPerThread:Long = nCitizens / this.nThreads;
+	public def runCitizens(time:Long){
+		val nCitizens = citizenIDList.size();
+		val nAgentsPerThread:Long = nCitizens / this.nThreads;
 		
 		if(nAgentsPerThread == 0){		//	nCitizens < nThreads
-			finish for(i in 0..(nCitizens-1)) async{
-				val cid:Long = citizenIDList(i);
-				val ag:CitizenAgent = citizenAgents.getAgent(cid) as CitizenAgent;
+			@Pragma(Pragma.FINISH_LOCAL) finish for(i in 0..(nCitizens-1)) async{
+				val cid = citizenIDList(i);
+				val ag = citizenAgents.getAgent(cid) as CitizenAgent;
 				ag.run(time);
 			}
 		}else{
-			finish for (i in 0..(this.nThreads-1)) async {
-				var startIndex:Long = 0, endIndex:Long = 0;
+			@Pragma(Pragma.FINISH_LOCAL) finish for (i in 0..(this.nThreads-1)) async {
+				val startIndex = (nAgentsPerThread != 1 || i==0) ? (i*nAgentsPerThread) : (i*nAgentsPerThread+1);
 				
-				startIndex = (nAgentsPerThread != 1 || i==0) ? (i*nAgentsPerThread) : (i*nAgentsPerThread+1);
-				var tmp:Long = (nAgentsPerThread != 1) ? (i+1)*nAgentsPerThread-1 : (i+1)*nAgentsPerThread;
+				val tmp = (nAgentsPerThread != 1) ? (i+1)*nAgentsPerThread-1 : (i+1)*nAgentsPerThread;
 				
-				endIndex = tmp;
+				var endIndex:Long = tmp;
 				if(tmp >= nCitizens) endIndex  = nCitizens -1;
 				if(i == this.nThreads-1)endIndex = nCitizens -1;
 				if (Debug.debugEnabled) Console.OUT.println(here.id + " Handling citizens from " + startIndex + " to " + endIndex);
 				
 				for(var j:Long = startIndex; j<=endIndex; j++){
-					val cid:Long = citizenIDList(j);
+					val cid = citizenIDList(j);
 					if(citizenAgents.existAgent(cid) == false ) continue;
-					val ag:CitizenAgent = citizenAgents.getAgent(cid) as CitizenAgent;
+					val ag = citizenAgents.getAgent(cid) as CitizenAgent;
 					ag.run(time);
 				}
 			}
@@ -188,25 +186,25 @@ public class AgentManager {
 	/**
 	 *  A method for running all the drives' method 
 	 */
-	public def runDrivers(var time:Long){
+	public def runDrivers(time:Long){
 		val NPHASES = this.nPhases;
 		val NTHREADS = this.nThreads;
 
 		if (NPHASES > 1) {
 			for (phaseId in 0n..(NPHASES-1n)) {
-				finish for (i in 0n..(NTHREADS-1n)) async {
+				@Pragma(Pragma.FINISH_LOCAL) finish for (i in 0n..(NTHREADS-1n)) async {
 					for(var j:Int = i; j < nDrivers; j += NTHREADS) {
-						val did:Long = id2pMap.get(j);
-						val ag:DriverAgent = driverAgents.getAgent(did) as DriverAgent;
+						val did = id2pMap.get(j);
+						val ag = driverAgents.getAgent(did) as DriverAgent;
 						ag.run(time, phaseId);
 					}
 				}
 			}
 		} else {
-			finish for (i in 0n..(NTHREADS-1n)) async {
+			@Pragma(Pragma.FINISH_LOCAL) finish for (i in 0n..(NTHREADS-1n)) async {
 				for(var j:Int = i; j < nDrivers; j += NTHREADS) {
-					val did:Long = id2pMap.get(j);
-					val ag:DriverAgent = driverAgents.getAgent(did) as DriverAgent;
+					val did = id2pMap.get(j);
+					val ag = driverAgents.getAgent(did) as DriverAgent;
 					ag.run(time);
 				}
 			}
@@ -214,15 +212,15 @@ public class AgentManager {
 	}
 	
 	public def handleMessages(totalMsgQ:XMessageQueue){		//	totalMsgQ is a message queue for storing all the received messages
-		val bmsgs : XMessageList = totalMsgQ.getMessages(BROADCASTID);
+		val bmsgs = totalMsgQ.getMessages(BROADCASTID);
 		for(aid:Long in citizenAgents.keySet()){ // TODO: not loop all citizen
-			val cp : XCitizenProxy = (citizenAgents.getAgent(aid) as CitizenAgent).getCitizen();
+			val cp = (citizenAgents.getAgent(aid) as CitizenAgent).getCitizen();
 			if(bmsgs != null){
 				if(Debug.debugEnabled)Console.OUT.println("Broadcast onMessages " +  bmsgs.size() + " at " + aid + " " + cp.getID());
 				cp.onMessages(bmsgs);
 			}
 			
-			val msgs : XMessageList = totalMsgQ.getMessages(aid); // TODO: concat 2 messagelist
+			val msgs = totalMsgQ.getMessages(aid); // TODO: concat 2 messagelist
 			if(msgs != null){
 				if(Debug.debugEnabled)Console.OUT.println("onMessages " +  msgs.size() + " at " + aid + " " + cp.getID());
 				cp.onMessages(msgs);
