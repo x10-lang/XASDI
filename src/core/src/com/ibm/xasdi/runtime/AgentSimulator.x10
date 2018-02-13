@@ -189,18 +189,10 @@ public class AgentSimulator {
 		val pid = here.id;
 		finish for(h2 in Place.places()) async {
 			if(h2.id != pid){
-				val driverOrigArr = at(h2){
-					val arr = new Rail[XMessageQueue](1);
-					arr(0) = managers().mr.getDriverMsgQ(pid as Int);
-					new GlobalRail(arr)
-				};
-				val citizenOrigArr = at(h2){
-					val arr = new Rail[XMessageQueue](1);
-					arr(0) = managers().mr.getCitizenMsgQ(pid as Int);
-					new GlobalRail(arr)
-				};
-				
+				val driverOrigArr = at(h2) GlobalRail([managers().mr.getDriverMsgQ(pid as Int)]);
+				val citizenOrigArr = at(h2) GlobalRail([managers().mr.getCitizenMsgQ(pid as Int)]);
 				logger.info(citizenOrigArr.size + " " + driverOrigArr.size);		//	@DEBUG
+
 				val driverDstArr = new Rail[XMessageQueue](1);
 				val citizenDstArr = new Rail[XMessageQueue](1);
 				logger.info(citizenDstArr.size + " " + driverDstArr.size);			//	@DEBUG
