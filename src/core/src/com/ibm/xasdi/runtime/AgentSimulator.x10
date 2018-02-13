@@ -151,7 +151,7 @@ public class AgentSimulator {
 
 		logger.info("shutdown ...");
 		
-		finish for (h in Place.places()) async at(h) {
+		finish for (h in Place.places()) at(h) async {
 			managers().complete();
 		}
 	}
