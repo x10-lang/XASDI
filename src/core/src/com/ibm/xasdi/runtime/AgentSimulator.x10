@@ -161,14 +161,19 @@ public class AgentSimulator {
 		val pid = here.id;
 		
 		finish for(h2 in Place.places()) async {
-			val ag = managers();
 			if(h2.id != pid){							//	here place does not use "at" deep copy
-				val temp1 = at(h2) managers().mr.getDriverMsgQ(pid as Int);
-				val temp2 = at(h2) managers().mr.getCitizenMsgQ(pid as Int);
+				val tempArr = at(h2) {
+					val ag = managers();
+					[ag.mr.getDriverMsgQ(pid as Int),ag.mr.getCitizenMsgQ(pid as Int)]
+				};
+				val temp1 = tempArr(0);
+				val temp2 = tempArr(1);
+				val ag = managers();
 				ag.handleMessages(temp1);
 				ag.mr.checkRemoteMessages(temp2, h2.id as Int);
 				ag.handleMessages(temp2);
 			}else{										//	handle messages at here place
+				val ag = managers();
 				val temp1 = ag.mr.getDriverMsgQ(pid as Int);
 				val temp2 = ag.mr.getCitizenMsgQ(pid as Int);
 				ag.handleMessages(temp1);
@@ -189,8 +194,12 @@ public class AgentSimulator {
 		val pid = here.id;
 		finish for(h2 in Place.places()) async {
 			if(h2.id != pid){
-				val driverOrigArr = at(h2) GlobalRail([managers().mr.getDriverMsgQ(pid as Int)]);
-				val citizenOrigArr = at(h2) GlobalRail([managers().mr.getCitizenMsgQ(pid as Int)]);
+				val tempArr = at(h2) {
+					val ag = managers();
+					[GlobalRail([ag.mr.getDriverMsgQ(pid as Int)]),GlobalRail([ag.mr.getCitizenMsgQ(pid as Int)])]
+				};
+				val driverOrigArr = tempArr(0);
+				val citizenOrigArr = tempArr(1);
 				logger.info(citizenOrigArr.size + " " + driverOrigArr.size);		//	@DEBUG
 
 				val driverDstArr = new Rail[XMessageQueue](1);
@@ -221,8 +230,12 @@ public class AgentSimulator {
 		finish for(h1 in Place.places()) at(h1) async{
 			val pid = here.id;
 			for(h2 in Place.places()) async{
-				val temp1 = at(h2) managers().mr.getDriverMsgQ(pid as Int);
-				val temp2 = at(h2) managers().mr.getCitizenMsgQ(pid as Int);
+				val tempArr = at(h2) {
+					val ag = managers();
+					[ag.mr.getDriverMsgQ(pid as Int),ag.mr.getCitizenMsgQ(pid as Int)]
+				};
+				val temp1 = tempArr(0);
+				val temp2 = tempArr(1);
 				val ag = managers();
 				ag.handleMessages(temp1);
 				ag.handleMessages(temp2);
