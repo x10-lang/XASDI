@@ -35,9 +35,9 @@ public class XASDIRuntime {
 	private static val logger = LogFactory.getLog("XASDILOG");
 	
 	public static def main(args: Rail[String]){
-		logger.info(NAME + " " + VERSION);
+		logger.warn(NAME + " " + VERSION);
         
-		val prop:Properties = new Properties();
+		val prop = new Properties();
 		val slash = prop.getSystemProperty("file.separator");
 		
 		var bootxmlPath:String = prop.getSystemProperty("xasdi.location.bootxml");
@@ -54,39 +54,32 @@ public class XASDIRuntime {
 		}
 
 		if (checkBootxml(prop)) {
-        
-			var dir:String = prop.getProperty("directory");
+			val dir = prop.getProperty("directory");
 		
-			var simTime : Long;
-			var simName : String;
-			var nThreads : Int;
-			var nPlaces : Int;
+			val simTime = Long.parse(prop.getProperty("simTime"));
+			val simName = prop.getProperty("simName");
+			val nThreads = Int.parse(prop.getProperty("nThreads"));
+			val nPlaces = Int.parse(prop.getProperty("nPlaces"));
 		
-			var total : Int = 0n;
-			var syncInterval : Int = 1n;
+			val syncInterval = 1n;
 		
-			simTime = Long.parse(prop.getProperty("simTime"));
-			simName = prop.getProperty("simName");
-			nThreads = Int.parse(prop.getProperty("nThreads"));
-			nPlaces = Int.parse(prop.getProperty("nPlaces"));
 			val nPhases = Int.parse(prop.getProperty("numPhase"));
 		
-			var time: long = - System.nanoTime();
+			var time:Long = - System.nanoTime();
 		
 			logger.info("Initializing.");
 		
-			val am : AgentManager = new AgentManager(nThreads, nPhases);
+			val am = new AgentManager(nThreads, nPhases);
 		
 			logger.info("Copying Agent Simulator to Multiple Places with PlaceLocalHandle ...");
 			logger.info("It might take a while if the number of places is many.");
 		
-			val nThreads_ = nThreads;
-			var copyTime:long = System.nanoTime();
+			val copyTime = System.nanoTime();
 			val agentsim : PlaceLocalHandle[AgentSimulator];
 			if(XASDIRuntime.plhOpt){
-				agentsim = PlaceLocalHandle.makeFlat[AgentSimulator](Place.places(), ()=> new AgentSimulator(am, nThreads_));
+				agentsim = PlaceLocalHandle.makeFlat[AgentSimulator](Place.places(), ()=> new AgentSimulator(am, nThreads));
 			}else{
-				agentsim = PlaceLocalHandle.make[AgentSimulator](Place.places(), ()=> new AgentSimulator(am, nThreads_));
+				agentsim = PlaceLocalHandle.make[AgentSimulator](Place.places(), ()=> new AgentSimulator(am, nThreads));
 			}
 			logger.info("Finished Copying Agent Simulator. Elapsed time=" + ((System.nanoTime() - copyTime)/(1000*1000*1000)) + "s" );
 		
@@ -95,13 +88,13 @@ public class XASDIRuntime {
 			logger.info("Application is termimnated successfully");
 		
 			time += System.nanoTime();
-			logger.info("Total (time=" + (time/(1000*1000)) + " ms)");
+			logger.warn("Total (time=" + (time/(1000*1000)) + " ms)");
 		}
 
 	}
 	
 	public static def init(dir:String, simName:String, simTime:Long): XLauncherProxy{
-		val prop:Properties = new Properties();
+		val prop = new Properties();
 		val slash = prop.getSystemProperty("file.separator");
 		try{
 			var bootxmlPath:String = prop.getSystemProperty("xasdi.location.bootxml");
@@ -116,7 +109,7 @@ public class XASDIRuntime {
 		prop.setProperty("simTime", simTime.toString());
 		prop.setProperty("placenum", Place.numPlaces().toString());
 
-		val lp: XLauncherProxy = new XLauncherProxy(prop, here.id as Int);
+		val lp = new XLauncherProxy(prop, here.id as Int);
 	        logger.error("Prepare Agent Launcher...");
 		lp.prepare(prop);
 		
@@ -154,43 +147,43 @@ public class XASDIRuntime {
 					if (propertyMust(i)) return false;
 				} else {
 					switch(propertyType(i)) {
-						case 1n:
-							logger.info(propertyNames(i) + ": " + tmpStr);
-							break;
-						case 2n:
-							try {
-								val tmpVal = Int.parse(tmpStr);
-								logger.info(propertyNames(i) + ": " + tmpVal);
-							} catch (e:Exception) {
-								logger.error("Error: Value of " + propertyNames(i) + " should be integer");
-							}
-							break;
-						case 3n:
-							try {
-								val tmpVal = Long.parse(tmpStr);
-								logger.info(propertyNames(i) + ": " + tmpVal);
-							} catch (e:Exception) {
-								logger.error("Error: Value of " + propertyNames(i) + " should be integer");
-							}
-							break;
-						case 5n:
-							try {
-								val tmpVal = Double.parse(tmpStr);
-								logger.info(propertyNames(i) + ": " + tmpVal);
-							} catch (e:Exception) {
-								logger.error("Error: Value of " + propertyNames(i) + " should be double");
-							}
-							break;
-						case 6n:
-							try {
-								val tmpVal = Boolean.parse(tmpStr);
-								logger.info(propertyNames(i) + ": " + tmpVal);
-							} catch (e:Exception) {
-								logger.error("Error: Value of " + propertyNames(i) + " should be boolean");
-							}
-							break;
-						default:
-							break;
+					case 1n:
+						logger.info(propertyNames(i) + ": " + tmpStr);
+						break;
+					case 2n:
+						try {
+							val tmpVal = Int.parse(tmpStr);
+							logger.info(propertyNames(i) + ": " + tmpVal);
+						} catch (e:Exception) {
+							logger.error("Error: Value of " + propertyNames(i) + " should be integer");
+						}
+						break;
+					case 3n:
+						try {
+							val tmpVal = Long.parse(tmpStr);
+							logger.info(propertyNames(i) + ": " + tmpVal);
+						} catch (e:Exception) {
+							logger.error("Error: Value of " + propertyNames(i) + " should be integer");
+						}
+						break;
+					case 5n:
+						try {
+							val tmpVal = Double.parse(tmpStr);
+							logger.info(propertyNames(i) + ": " + tmpVal);
+						} catch (e:Exception) {
+							logger.error("Error: Value of " + propertyNames(i) + " should be double");
+						}
+						break;
+					case 6n:
+						try {
+							val tmpVal = Boolean.parse(tmpStr);
+							logger.info(propertyNames(i) + ": " + tmpVal);
+						} catch (e:Exception) {
+							logger.error("Error: Value of " + propertyNames(i) + " should be boolean");
+						}
+						break;
+					default:
+						break;
 					}
 				}
 			}
